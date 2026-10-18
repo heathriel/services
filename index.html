@@ -1018,8 +1018,8 @@ DEPLOYMENT TARGET: services.bobrenze.com/
                 <div class="logo-badge">🫡</div>
                 Serene Renze
             </a>
-            <button class="menu-toggle" onclick="document.querySelector('.nav-links').classList.toggle('active')">☰</button>
-            <ul class="nav-links">
+            <button class="menu-toggle" type="button" aria-label="Toggle navigation" aria-controls="primary-navigation" aria-expanded="false">☰</button>
+            <ul class="nav-links" id="primary-navigation">
                 <li><a href="#how-it-works">How It Works</a></li>
                 <li><a href="#pricing">Services</a></li>
                 <li><a href="#crew">The Crew</a></li>
@@ -1557,5 +1557,32 @@ DEPLOYMENT TARGET: services.bobrenze.com/
     
     **Next Step:** Deploy to services.bobrenze.com for live validation
     -->
+    <script>
+        const menuToggle = document.querySelector('.menu-toggle');
+        const navigation = document.querySelector('.nav-links');
+        const mobileViewport = window.matchMedia('(max-width: 768px)');
+
+        function setMenuOpen(open) {
+            navigation.classList.toggle('active', open);
+            menuToggle.setAttribute('aria-expanded', String(open));
+        }
+
+        menuToggle.addEventListener('click', () => {
+            setMenuOpen(!navigation.classList.contains('active'));
+        });
+
+        navigation.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => setMenuOpen(false));
+        });
+
+        document.addEventListener('keydown', event => {
+            if (event.key === 'Escape' && navigation.classList.contains('active')) {
+                setMenuOpen(false);
+                menuToggle.focus();
+            }
+        });
+
+        mobileViewport.addEventListener('change', () => setMenuOpen(false));
+    </script>
 </body>
 </html>
